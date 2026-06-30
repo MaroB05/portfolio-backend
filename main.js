@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const PORT = 3000;
 const app = express();
+const pageRouter = require('./routes/pages');
 const projectRouter = require('./routes/project');
 const expRouter = require('./routes/experience');
 const profileRouter = require('./routes/profile');
@@ -15,6 +16,7 @@ mongoose.connect("mongodb://localhost:27017/portfolio")
 
 app.use(cors());
 app.use(express.json());
+app.use('/api/pages', pageRouter);
 app.use('/api/project', projectRouter);
 app.use('/api/experience', expRouter);
 app.use('/api/profile', profileRouter);
