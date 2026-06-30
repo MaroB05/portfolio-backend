@@ -15,7 +15,7 @@ const Experience = new mongoose.model('Experience', experienceSchema);
 
 router.get('/', async (req,res, next)=>{
     try{
-        const experience = await Experience.find({});
+        const experience = await Experience.find({}).sort({startDate:-1});
         res.status(200).json(experience);
     } catch (err){
         console.error(err);
