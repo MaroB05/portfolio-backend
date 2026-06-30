@@ -45,8 +45,8 @@ router.post('/', async (req,res, next)=>{
 router.put('/:id', async (req, res, next)=>{
     try{
         const {name, email, subject, message} = req.body;
-        const message = await Message.findByIdAndUpdate(req.params.id, {name, email, subject, message}, {returnDocument:'after'});
-        res.status(201).json(message);
+        const updatedMessage = await Message.findByIdAndUpdate(req.params.id, {name, email, subject, message}, {returnDocument:'after'});
+        res.status(201).json(updatedMessage);
     } catch (err){
         console.log(err);
         next();

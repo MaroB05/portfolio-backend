@@ -35,8 +35,8 @@ router.get('/:id', async (req,res, next)=>{
 router.post('/', async (req,res, next)=>{
     try{
         const {name, description, technologies} = req.body;
-        await Project.insertOne({name, description, technologies});
-        res.status(201).json({name, description, technologies});
+        const newProject = await Project.insertOne({name, description, technologies});
+        res.status(201).json(newProject);
     } catch (err){
         console.log(err);
         next();
