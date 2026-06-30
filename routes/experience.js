@@ -35,9 +35,9 @@ router.get('/:id', async (req,res, next)=>{
 
 router.post('/', async (req,res, next)=>{
     try{
-        const {...exp} = req.body;
-        await Experience.insertOne(exp);
-        res.status(201).json(exp);
+        const {role, company, description, startDate, endDate, isActive} = req.body;
+        const newExp = await Experience.insertOne({role, company, description, startDate, endDate, isActive});
+        res.status(201).json(newExp);
     } catch (err){
         console.log(err);
         next();
@@ -46,8 +46,8 @@ router.post('/', async (req,res, next)=>{
 
 router.put('/:id', async (req, res, next)=>{
     try{
-        const {...exp} = req.body;
-        const experience = await Experience.findByIdAndUpdate(req.params.id, exp, {returnDocument:'after'});
+        const {role, company, description, startDate, endDate, isActive} = req.body;
+        const experience = await Experience.findByIdAndUpdate(req.params.id, {role, company, description, startDate, endDate, isActive}, {returnDocument:'after'});
         res.status(201).json(experience);
     } catch (err){
         console.log(err);

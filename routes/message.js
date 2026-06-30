@@ -33,9 +33,9 @@ router.get('/:id', async (req,res, next)=>{
 
 router.post('/', async (req,res, next)=>{
     try{
-        const {...exp} = req.body;
-        await Message.insertOne(exp);
-        res.status(201).json(exp);
+        const {name, email, subject, message} = req.body;
+        const newMsg = await Message.insertOne({name, email, subject, message});
+        res.status(201).json(newMsg);
     } catch (err){
         console.log(err);
         next();
@@ -44,8 +44,8 @@ router.post('/', async (req,res, next)=>{
 
 router.put('/:id', async (req, res, next)=>{
     try{
-        const {...exp} = req.body;
-        const message = await Message.findByIdAndUpdate(req.params.id, exp, {returnDocument:'after'});
+        const {name, email, subject, message} = req.body;
+        const message = await Message.findByIdAndUpdate(req.params.id, {name, email, subject, message}, {returnDocument:'after'});
         res.status(201).json(message);
     } catch (err){
         console.log(err);

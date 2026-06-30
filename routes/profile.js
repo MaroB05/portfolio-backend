@@ -19,6 +19,8 @@ const profileSchema = new mongoose.Schema({
 
 const Profile = new mongoose.model('Profile', profileSchema);
 
+const getUploadedFileUrl = (file) => file ? `/static/${file.filename}` : undefined;
+
 router.get('/', async (req,res, next)=>{
     try{
         const profile = await Profile.find({});
@@ -41,9 +43,9 @@ router.get('/:id', async (req,res, next)=>{
 
 router.post('/', async (req,res, next)=>{
     try{
-        const {...profile} = req.body;
-        await Profile.insertOne(profile);
-        res.status(201).json(profile);
+        const { name, role, degree, school, stack, status, email, github, linkedin, imgUrl, resumeUrl } = req.body;
+        const newProfile = await Profile.create({name, role, degree, school, stack, status, email, github, linkedin, imgUrl, resumeUrl});
+        res.status(201).json(newProfile);
     } catch (err){
         console.log(err);
         next();
@@ -52,10 +54,40 @@ router.post('/', async (req,res, next)=>{
 
 router.put('/:id', async (req, res, next)=>{
     try{
-        const {...prof} = req.body;
-        const profile = await Profile.findByIdAndUpdate(req.params.id, prof, {returnDocument:'after'});
+        const { name, role, degree, school, stack, status, email, github, linkedin, imgUrl, resumeUrl } = req.body;
+        const profile = await Profile.findByIdAndUpdate(req.params.id, {name, role, degree, school, stack, status, email, github, linkedin, imgUrl, resumeUrl}, {returnDocument:'after'});
         res.status(201).json(profile);
     } catch (err){
+        console.log(err);
+        next();
+    }
+});
+
+router.patch('/:id/upload-img', upload.single('img'), async (req, res, next) => {
+    try {
+        const profile = await Profile.findByIdAndUpdate(
+            req.params.id,
+            { imgUrl: getUploadedFileUrl(req.file) },
+            { returnDocument: 'after' }
+        );
+
+        res.status(200).json(profile);
+    } catch (err) {
+        console.log(err);
+        next();
+    }
+});
+
+router.patch('/:id/upload-resume', upload.single('resume'), async (req, res, next) => {
+    try {
+        const profile = await Profile.findByIdAndUpdate(
+            req.params.id,
+            { resumeUrl: getUploadedFileUrl(req.file) },
+            { returnDocument: 'after' }
+        );
+
+        res.status(200).json(profile);
+    } catch (err) {
         console.log(err);
         next();
     }
@@ -71,9 +103,6 @@ router.delete('/:id', async (req, res, next)=>{
     }
 });
 
-//TODO: add files upload
-// router.post('/upload/:resource', upload.single('img'), async(req, res, next)=>{
 
-// });
 
 module.exports = router;

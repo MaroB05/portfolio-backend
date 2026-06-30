@@ -14,7 +14,7 @@ const Education = new mongoose.model('Education', educationSchema);
 
 router.get('/', async (req,res, next)=>{
     try{
-        const education = await Message.find({});
+        const education = await Education.find({});
         res.status(200).json(education);
     } catch (err){
         console.error(err);
@@ -24,7 +24,7 @@ router.get('/', async (req,res, next)=>{
 
 router.get('/:id', async (req,res, next)=>{
     try{
-        const education = await Message.findById(req.params.id);
+        const education = await Education.findById(req.params.id);
         res.status(200).json(education);
     } catch(err){
         console.error(err);
@@ -34,9 +34,9 @@ router.get('/:id', async (req,res, next)=>{
 
 router.post('/', async (req,res, next)=>{
     try{
-        const {...exp} = req.body;
-        await Message.insertOne(exp);
-        res.status(201).json(exp);
+        const {name, uni, description, start, end} = req.body;
+        const newEdu = await Education.insertOne({name, uni, description, start, end});
+        res.status(201).json(newEdu);
     } catch (err){
         console.log(err);
         next();
@@ -45,8 +45,8 @@ router.post('/', async (req,res, next)=>{
 
 router.put('/:id', async (req, res, next)=>{
     try{
-        const {...exp} = req.body;
-        const education = await Message.findByIdAndUpdate(req.params.id, exp, {returnDocument:'after'});
+        const {name, uni, description, start, end} = req.body;
+        const education = await Education.findByIdAndUpdate(req.params.id, {name, uni, description, start, end}, {returnDocument:'after'});
         res.status(201).json(education);
     } catch (err){
         console.log(err);
@@ -56,7 +56,7 @@ router.put('/:id', async (req, res, next)=>{
 
 router.delete('/:id', async (req, res, next)=>{
     try{
-        const education = await Message.findByIdAndDelete(req.params.id);
+        const education = await Education.findByIdAndDelete(req.params.id);
         res.status(201).json(education);
     } catch (err){
         console.log(err);
