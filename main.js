@@ -1,6 +1,7 @@
+const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
-const PORT = 8000;
+const PORT = 3000;
 const app = express();
 const projectRouter = require('./routes/project');
 const expRouter = require('./routes/experience');
@@ -12,11 +13,12 @@ mongoose.connect("mongodb://localhost:27017/portfolio")
         .catch((err)=>{console.error(err)});
 
 
+app.use(cors());
 app.use(express.json());
-app.use('/project', projectRouter);
-app.use('/experience', expRouter);
-app.use('/profile', profileRouter);
-app.use('/message', messageRouter);
+app.use('/api/project', projectRouter);
+app.use('/api/experience', expRouter);
+app.use('/api/profile', profileRouter);
+app.use('/api/message', messageRouter);
 
 
 app.use((req,res)=>{
